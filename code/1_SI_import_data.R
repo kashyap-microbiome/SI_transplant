@@ -16,11 +16,10 @@ library(scales)
 ####################################################################################
 #set working directory
 
-setwd("~/Dropbox/Mayo_RS/R/202205 SI transplant/2nd_round_code/github code/")
 #setwd("./202205 SI transplant/") #change your working directory
 
-file_name <- "./small_bowel_humanization_data_202210.xlsx"
-meta_file_name <- "./metadata_10_26_22.xlsx"
+file_name <- "./data/small_bowel_humanization_data_202210.xlsx"
+meta_file_name <- "./data/metadata_10_26_22.xlsx"
 
 
 data_counts <- as.data.frame(read_excel(file_name, sheet = 1), stringsAsFactors=F)
