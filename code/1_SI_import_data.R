@@ -10,16 +10,19 @@ require(ggplot2)
 require(RColorBrewer)
 require(ggpubr)
 require(cowplot)
-library(scales)
+require(scales)
+require(patchwork)
+
 
 
 ####################################################################################
 #set working directory
 
-#setwd("./202205 SI transplant/") #change your working directory
+file_dir <- dirname(rstudioapi::getSourceEditorContext()$path)
+setwd(file_dir) 
 
-file_name <- "./data/small_bowel_humanization_data_202210.xlsx"
-meta_file_name <- "./data/metadata_10_26_22.xlsx"
+file_name <- "../data/small_bowel_humanization_data_202210.xlsx"
+meta_file_name <- "../data/metadata_10_26_22.xlsx"
 
 
 data_counts <- as.data.frame(read_excel(file_name, sheet = 1), stringsAsFactors=F)
@@ -40,7 +43,7 @@ str(metadata)
 table(metadata$origin) #mouse and human
 table(metadata$sample_class)
 #negative_controls        phenotypes         profiling 
-#9                59                76 
+#           9                59                76 
 
 head(metadata, 10)
 
@@ -54,7 +57,7 @@ data_counts <- data_counts[, order(colnames(data_counts))]
 metadata <- metadata[order(metadata$sample_name),]
 
 #inspect if they are in the same order
-cbind(metadata$sample_name, colnames(data_counts))
+table(metadata$sample_name == colnames(data_counts))
 
 
 ####################################################################################
@@ -147,6 +150,8 @@ agg_sub <- agg_sub[-to_rm,]
 data_counts_genus <- sapply(agg_sub[,-1], function(y) {as.numeric(as.character(y))})
 rownames(data_counts_genus) <- agg_sub$Group.1
 
+data_counts_genus_copy <- data_counts_genus
+
 
 #removing rows that miss >90%
 data_counts_genus_sub <- data_counts_genus[rowSums(data_counts_genus > 1) > 0.1*ncol(data_counts_genus),]
@@ -154,6 +159,7 @@ data_RA_genus_sub <- sweep(data_counts_genus_sub, 2, colSums(data_counts_genus_s
 
 dim(data_RA_genus_sub)
 #132 119
+
 
 
 ####################################################################################
